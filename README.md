@@ -8,12 +8,12 @@
 ## Установка
 1. Клонируйте репозиторий:
 ```bash
-git clone https://github.com/ваш_пользователь/ваш_репозиторий.git
+git clone https://github.com/mrmoish/espanol.git
 ```
 
 2. Перейдите в директорию проекта:
 ```bash
-cd ваш_репозиторий
+cd espanol
 ```
 
 
