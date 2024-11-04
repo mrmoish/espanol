@@ -16,10 +16,34 @@
     </style>
 </head>
 <body>
-    <div>Hola!</div>
+    <div id="display">Hola!</div>
     <script>
-    // Функция для загрузки файла и вывода первой строки
-    function loadFile() {
+
+        
+    // Список глаголов
+    let verbs = [];
+    loadVerbs();
+
+    // Функция для выбора и отображения случайного глагола из списка verbs
+    function displayRandomVerb() {
+        // Проверяем, что в массиве verbs есть хотя бы один элемент
+        if (verbs.length > 0) {
+            // Генерируем случайный индекс в пределах массива verbs
+            const randomIndex = Math.floor(Math.random() * verbs.length);
+
+            // Извлекаем строку по сгенерированному индексу
+            const randomLine = verbs[randomIndex];
+
+            // Разделяем строку на части по символу "–" и сохраняем первую часть в result
+            const result = randomLine.split('–');
+
+            // Выводим первую часть строки (например, глагол) в элемент с id="id33"
+            document.getElementById("display").textContent = result[0];
+        }
+    }
+
+    // Функция для загрузки файла с глаголами
+    function loadVerbs() {
         // Используем fetch для загрузки файла с сервера
         fetch('verbs')
             .then(response => {
@@ -33,18 +57,13 @@
                 const lines = content.split("\n");
 
                 // Фильтруем массив, оставляя только непустые строки (удаляем строки, которые содержат только пробелы)
-                nonEmptyLines = lines.filter(line => line.trim() !== "");
+                verbs = lines.filter(line => line.trim() !== "");
 
-
-                alert('hello');
-
+                displayRandomVerb();
             })
             // Обрабатываем ошибки, если загрузка не удалась, и выводим их в консоль
             .catch(error => console.error("Ошибка:", error));
     }
-
-    loadFile();
-
     </script>
 </body>
 </html>
