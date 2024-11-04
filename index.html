@@ -19,10 +19,16 @@
     <div id="display">Hola!</div>
     <script>
 
-        
+
     // Список глаголов
     let verbs = [];
     loadVerbs();
+
+    // Обработчик клика всей страницы
+    document.addEventListener("click", function(event) {
+        // При клике на любой элемент документа вызываем функцию отображения случайного глагола
+        displayRandomVerb();
+    });
 
     // Функция для выбора и отображения случайного глагола из списка verbs
     function displayRandomVerb() {
@@ -58,8 +64,6 @@
 
                 // Фильтруем массив, оставляя только непустые строки (удаляем строки, которые содержат только пробелы)
                 verbs = lines.filter(line => line.trim() !== "");
-
-                displayRandomVerb();
             })
             // Обрабатываем ошибки, если загрузка не удалась, и выводим их в консоль
             .catch(error => console.error("Ошибка:", error));
