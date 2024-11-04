@@ -20,35 +20,52 @@
     <script>
 
 
-    // Список глаголов
-    let verbs = [];
-    loadVerbs();
+// Список глаголов
+let verbs = [];
+loadVerbs(); // Загружаем глаголы в массив
 
-    let flag = 0;
-    
-    let answer;
+let flag = 0; // Флаг для отслеживания состояния отображения глаголов
 
-    // Обработчик клика всей страницы
-    document.addEventListener("click", function(event) {
-        // При клике на любой элемент документа вызываем функцию отображения случайного глагола
+let answer; // Переменная для хранения правильного ответа
 
+// Обработчик клика на всей странице
+document.addEventListener("click", function(event) {
+    // При клике на любой элемент документа выполняем действия в зависимости от текущего состояния (flag)
 
-        switch (flag) {
-            case 0:
-                displayRandomVerb();
-                flag = 1;
-                break;
+    switch (flag) {
+        case 0:
+            // Первое состояние: показываем случайный глагол
+            flag = 1; // Переходим к следующему состоянию
+            displayRandomVerb(); // Вызываем функцию для отображения случайного глагола
+            break;
 
-            case 1:
-                flag = 2;
-                break;
+        case 1:
+            // Второе состояние: показываем случайный верный и неверный глагол
+            flag = 2; // Переходим к следующему состоянию
 
-            default:
-                document.getElementById("display").textContent = answer;
-                flag = 0;
-                break;
-        }
-    });
+            // Генерируем случайный индекс в пределах массива verbs
+            const randomIndex = Math.floor(Math.random() * verbs.length);
+
+            // Извлекаем строку по сгенерированному индексу
+            let falseVerb = verbs[randomIndex].split('–')[1]; // Получаем неверный глагол
+            let trueVerb = answer.split('–')[1]; // Получаем верный глагол
+
+            // Случайным образом определяем порядок отображения глаголов
+            if (Math.floor(Math.random() * 2)) {
+                document.getElementById("display").textContent = trueVerb + ' или ' + falseVerb; // Верный глагол первым
+            } else {
+                document.getElementById("display").textContent = falseVerb + ' или ' + trueVerb; // Неверный глагол первым
+            }
+            break;
+
+        default:
+            // Состояние по умолчанию: отображаем правильный ответ
+            flag = 0; // Сбрасываем флаг
+            document.getElementById("display").textContent = answer; // Показываем правильный глагол
+            break;
+    }
+});
+
 
     // Функция для выбора и отображения случайного глагола из списка verbs
     function displayRandomVerb() {
