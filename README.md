@@ -16,5 +16,9 @@ git clone https://github.com/mrmoish/espanol.git
 cd espanol
 ```
 
+3. Запустите локальный сервер с помощью Python:
+```sh
+python3 -m http.server 8001
+```
 
 

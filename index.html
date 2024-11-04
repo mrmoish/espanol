@@ -17,5 +17,34 @@
 </head>
 <body>
     <div>Hola!</div>
+    <script>
+    // Функция для загрузки файла и вывода первой строки
+    function loadFile() {
+        // Используем fetch для загрузки файла с сервера
+        fetch('verbs')
+            .then(response => {
+                // Проверяем, успешно ли загрузился файл
+                if (!response.ok) throw new Error("Ошибка загрузки файла");
+                // Если загрузка успешна, возвращаем содержимое как текст
+                return response.text();
+            })
+            .then(content => {
+                // Разбиваем загруженное содержимое на массив строк по символу новой строки
+                const lines = content.split("\n");
+
+                // Фильтруем массив, оставляя только непустые строки (удаляем строки, которые содержат только пробелы)
+                nonEmptyLines = lines.filter(line => line.trim() !== "");
+
+
+                alert('hello');
+
+            })
+            // Обрабатываем ошибки, если загрузка не удалась, и выводим их в консоль
+            .catch(error => console.error("Ошибка:", error));
+    }
+
+    loadFile();
+
+    </script>
 </body>
 </html>
