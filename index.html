@@ -5,86 +5,104 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ESPAÑOL</title>
     <style>
-        body {
-            height: 100vh; /* Высота страницы 100% от видимой области */
-            display: flex; /* Используем flexbox для центровки */
-            justify-content: center; /* Горизонтальное выравнивание */
-            text-align: center;      /* Центрирование текста внутри блока */
-            align-items: center; /* Центрируем по вертикали */
-            font-family: Tahoma, sans-serif; /* Устанавливаем шрифт Tahoma */
-            font-size: 3em; /* Размер шрифта */
+        body { 
+            display: flex; /* Используем flexbox для центрирования содержимого */
+
+            height: 100vh; /* Высота страницы 100% для центрирования по вертикали */
+            align-items: center; /* Центрируем содержимое по вертикали */
+
+            justify-content: center; /* Центрируем содержимое по горизонтали */
+            text-align: center; /* Центрируем текст потомков */
+
+            margin: 0; /* Убираем отступы, чтобы высота не превышала 100% */
+            font-family: Tahoma, sans-serif;
+            font-size: 3em;
+        }
+
+        .hidden { /* Класс для скрытия элемента */
+            display: none;
         }
     </style>
 </head>
 <body>
-    <div id="display">Hola!</div>
+
+    <div>
+        <div id="displayFirst">Hola!</div>
+        <div id="displaySeparator" class="hidden"></div>
+        <div id="displaySecond" class="hidden"></div>
+    </div>
+
     <script>
+    // Массив для хранения глаголов
+    let verbs = [];
+    loadVerbs(); // Загружаем глаголы в массив
 
+    let displayState = 0; // Переменная для отслеживания текущего состояния отображения
 
-// Список глаголов
-let verbs = [];
-loadVerbs(); // Загружаем глаголы в массив
+    let currentVerbParts; // Переменная для хранения частей текущего глагола (оригинал и перевод)
 
-let flag = 0; // Флаг для отслеживания состояния отображения глаголов
+    // Обработчик клика на странице
+    document.addEventListener("click", function(event) {
+        // Обрабатываем действия в зависимости от текущего состояния отображения (displayState)
 
-let answer; // Переменная для хранения правильного ответа
+        switch (displayState) {
+            case 0:
+                // Первое состояние: отображаем случайный глагол
+                displayState = 1; // Переходим ко второму состоянию
 
-// Обработчик клика на всей странице
-document.addEventListener("click", function(event) {
-    // При клике на любой элемент документа выполняем действия в зависимости от текущего состояния (flag)
+                // Скрываем разделитель (отображается в третьем состоянии)
+                document.getElementById('displaySeparator').classList.add('hidden');
 
-    switch (flag) {
-        case 0:
-            // Первое состояние: показываем случайный глагол
-            flag = 1; // Переходим к следующему состоянию
-            displayRandomVerb(); // Вызываем функцию для отображения случайного глагола
-            break;
+                // Генерируем случайный индекс в пределах массива verbs
+                const randomIndex = Math.floor(Math.random() * verbs.length);
 
-        case 1:
-            // Второе состояние: показываем случайный верный и неверный глагол
-            flag = 2; // Переходим к следующему состоянию
+                // Получаем глагол и его перевод как массив
+                currentVerbParts = verbs[randomIndex].split('–');
 
-            // Генерируем случайный индекс в пределах массива verbs
-            const randomIndex = Math.floor(Math.random() * verbs.length);
+                // Показываем случайный глагол
+                document.getElementById("displayFirst").textContent = currentVerbParts[0];
+                break;
 
-            // Извлекаем строку по сгенерированному индексу
-            let falseVerb = verbs[randomIndex].split('–')[1]; // Получаем неверный глагол
-            let trueVerb = answer.split('–')[1]; // Получаем верный глагол
+            case 1:
+                // Второе состояние: отображаем случайный правильный и неправильный перевод глагола
+                displayState = 2; // Переходим к третьему состоянию
 
-            // Случайным образом определяем порядок отображения глаголов
-            if (Math.floor(Math.random() * 2)) {
-                document.getElementById("display").textContent = trueVerb + ' или ' + falseVerb; // Верный глагол первым
-            } else {
-                document.getElementById("display").textContent = falseVerb + ' или ' + trueVerb; // Неверный глагол первым
-            }
-            break;
+                // Генерируем случайный индекс для получения неверного перевода
+                const randomIndex2 = Math.floor(Math.random() * verbs.length);
 
-        default:
-            // Состояние по умолчанию: отображаем правильный ответ
-            flag = 0; // Сбрасываем флаг
-            document.getElementById("display").textContent = answer; // Показываем правильный глагол
-            break;
-    }
-});
+                // Извлекаем неверный перевод из массива
+                let falseTranslation = verbs[randomIndex2].split('–')[1]; // Неверный ответ
+                let correctTranslation = currentVerbParts[1]; // Верный ответ
 
+                // Записываем разделитель (в третьем состоянии перезаписывался)
+                document.getElementById("displaySeparator").textContent = ' ——— или ——— ';
+                // Отображаем разделитель и второй блок (в первом состояние скрыты)
+                document.getElementById('displaySeparator').classList.remove('hidden');
+                document.getElementById('displaySecond').classList.remove('hidden');
 
-    // Функция для выбора и отображения случайного глагола из списка verbs
-    function displayRandomVerb() {
-        // Проверяем, что в массиве verbs есть хотя бы один элемент
-        if (verbs.length > 0) {
-            // Генерируем случайный индекс в пределах массива verbs
-            const randomIndex = Math.floor(Math.random() * verbs.length);
+                // Случайным образом определяем порядок отображения вариантов перевода
+                if (Math.random() < 0.5) {
+                    document.getElementById("displayFirst").textContent = correctTranslation;
+                    document.getElementById("displaySecond").textContent = falseTranslation;
+                } else {
+                    document.getElementById("displayFirst").textContent = falseTranslation;
+                    document.getElementById("displaySecond").textContent = correctTranslation;
+                }
+                break;
 
-            // Извлекаем строку по сгенерированному индексу
-            answer = verbs[randomIndex];
+            default:
+                // Третье состояние: показываем правильный перевод текущего глагола
+                displayState = 0; // Сбрасываем состояние
 
-            // Разделяем строку на части по символу "–" и сохраняем первую часть в result
-            const result = answer.split('–');
+                // Отображаем правильный ответ и оригинальный глагол
+                document.getElementById("displayFirst").textContent = currentVerbParts[1];
+                document.getElementById("displaySeparator").textContent = currentVerbParts[0];
 
-            // Выводим первую часть строки (например, глагол) в элемент с id="id33"
-            document.getElementById("display").textContent = result[0];
+                // Скрываем второй блок
+                document.getElementById('displaySecond').classList.add('hidden');
+                break;
         }
-    }
+    });
 
     // Функция для загрузки файла с глаголами
     function loadVerbs() {
