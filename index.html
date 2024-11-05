@@ -19,112 +19,97 @@
             font-size: 3em;
         }
 
-        #displaySeparator { /* Разделитель с текстом ' - или - ' */
-            font-size: 0.5em; /* Размер шрифта уменьшен вдвое */
-        }
-
-        .separatorLines::before,
-        .separatorLines::after{
-            /* до и после 'или' эта линия */
-            content: ' ——— ';
-        }
-
-        #displaySeparator + div {
-            /* Уменьшаем межстрочный интервал, чтобы текст был ближе к разделителю */
-            /* для более точного вертикального центрирования */
+        hr + div {
             line-height: 0.9em;
         }
 
-        .hidden { /* Класс для скрытия элемента */
+        #original { /* Разделитель с текстом ' - или - ' */
+            font-size: 0.5em; /* Размер шрифта уменьшен вдвое */
+        }
+
+
+        /* Скрываем все div-блоки в body */
+        body > div { 
             display: none;
         }
+
+        /* Класс для отображения div-блоки */
+        .show {
+            display: block;
+        }
     </style>
-</head>
-<body>
-
-    <div>
-        <div id="displayFirst">Hola!</div>
-        <div id="displaySeparator" class="hidden"></div>
-        <div id="displaySecond" class="hidden"></div>
-    </div>
-
     <script>
-    // Массив для хранения глаголов
-    let verbs = [];
-    loadVerbs(); // Загружаем глаголы в массив
-
-    let displayState = 0; // Переменная для отслеживания текущего состояния отображения
-
-    let currentVerbParts; // Переменная для хранения частей текущего глагола (оригинал и перевод)
+    // Переменная для отслеживания текущего состояния отображения
+    let displayState = 1;
+    // Переменная для хранения частей текущего глагола (оригинал и перевод)
+    let currentVerbParts = [];
 
     // Обработчик клика на странице
     document.addEventListener("click", function(event) {
-        // Обрабатываем действия в зависимости от текущего состояния отображения (displayState)
-
+        // Обрабатываем действия в зависимости от текущего состояния отображения
         switch (displayState) {
             case 0:
-                // Первое состояние: отображаем случайный глагол
-                displayState = 1; // Переходим ко второму состоянию
+                // [зацикливания] Промежуточное состояние между 2 и 1 состоянием 
 
-                // Скрываем разделитель (отображается в третьем состоянии)
-                document.getElementById('displaySeparator').classList.add('hidden');
+                // Для следующего клика указываем следующее состояние
+                displayState++;
+                // TODO: [оптимизация] увеличить на +2, а не на +1 в case 0 и 1 
 
-                // Генерируем случайный индекс в пределах массива verbs
-                const randomIndex = Math.floor(Math.random() * verbs.length);
+                // Отображаем нулевой блок (и скрываем блок 2)
+                showDisplay(0);
 
-                // Получаем глагол и его перевод как массив
-                currentVerbParts = verbs[randomIndex].split('–');
+                // Переход к case 1 без использования break
+            case 1:
+                // Начинается с этого блока после приветствия 
+                // Первое состояние: отображаем случайный глагол 
 
-                // Показываем случайный глагол
-                document.getElementById("displayFirst").textContent = currentVerbParts[0];
+                displayState++; // Переходим ко второму состоянию
+
+                // В массив добавляем случайный глагол и его перевод 
+                currentVerbParts = randomVerbParts();
+
+                // Отображаем случайный глагол
+                divs[0].textContent = currentVerbParts[0];
                 break;
 
-            case 1:
-                // Второе состояние: отображаем случайный правильный и неправильный перевод глагола
-                displayState = 2; // Переходим к третьему состоянию
+            case 2:
+                // Второе состояние: отображаем правильный и неправильный перевод глагола
 
-                // Генерируем случайный индекс для получения неверного перевода
-                const randomIndex2 = Math.floor(Math.random() * verbs.length);
+                // Для следующего клика указываем следующее состояние
+                displayState++;
 
-                // Извлекаем неверный перевод из массива
-                let falseTranslation = verbs[randomIndex2].split('–')[1]; // Неверный ответ
-                let correctTranslation = currentVerbParts[1]; // Верный ответ
-
-                // Записываем разделитель (в третьем состоянии перезаписывался)
-                document.getElementById("displaySeparator").textContent = ' или ';
-                // Добавляем линии разделения
-                document.getElementById('displaySeparator').classList.add('separatorLines');
-                // Отображаем разделитель и второй блок (в первом состояние скрыты)
-                document.getElementById('displaySeparator').classList.remove('hidden');
-                document.getElementById('displaySecond').classList.remove('hidden');
+                // Отображаем следующий блок (и скрываем предыдущий)
+                showDisplay(1);
 
                 // Случайным образом определяем порядок отображения вариантов перевода
                 if (Math.random() < 0.5) {
-                    document.getElementById("displayFirst").textContent = correctTranslation;
-                    document.getElementById("displaySecond").textContent = falseTranslation;
+                    document.getElementById("showRandomOne").textContent = currentVerbParts[1];
+                    document.getElementById("showRandomTwo").textContent = randomVerbParts()[1];
                 } else {
-                    document.getElementById("displayFirst").textContent = falseTranslation;
-                    document.getElementById("displaySecond").textContent = correctTranslation;
+                    document.getElementById("showRandomOne").textContent = randomVerbParts()[1];
+                    document.getElementById("showRandomTwo").textContent = currentVerbParts[1];
                 }
                 break;
 
             default:
                 // Третье состояние: показываем правильный перевод текущего глагола
-                displayState = 0; // Сбрасываем состояние
+                // Для следующего клика сбрасываем состояние
+                displayState = 0;
 
-                // Отображаем правильный ответ и оригинальный глагол
-                document.getElementById("displayFirst").textContent = currentVerbParts[1];
-                document.getElementById("displaySeparator").textContent = currentVerbParts[0];
+                // Отображаем следующий блок (и скрываем предыдущий)
+                showDisplay(2);
 
-                // Убираем линии разделения
-                document.getElementById('displaySeparator').classList.remove('separatorLines');
-
-                // Скрываем второй блок
-                document.getElementById('displaySecond').classList.add('hidden');
+                // Отображаем правильный перевод и оригинальный глагол
+                document.getElementById("translate").textContent = currentVerbParts[1];
+                document.getElementById("original").textContent = currentVerbParts[0];
                 break;
         }
     });
 
+
+    // Массив для хранения глаголов
+    let verbs = ['1'];
+    loadVerbs(); // Загружаем глаголы в массив
     // Функция для загрузки файла с глаголами
     function loadVerbs() {
         // Используем fetch для загрузки файла с сервера
@@ -145,6 +130,45 @@
             // Обрабатываем ошибки, если загрузка не удалась, и выводим их в консоль
             .catch(error => console.error("Ошибка:", error));
     }
+
+
+    // Функция для получения случайного глагола
+    function randomVerbParts() {
+        // Генерируем случайный индекс для получения случайного перевода
+        // Получаем глагол с переводом по индексу и разбиваем на массив
+        const verb = verbs[Math.floor(Math.random() * verbs.length)].split('–');
+
+        // Если случайный глагол совпадает с текущим, то пробуем снова
+        return verb[0] === currentVerbParts[0] ? randomVerbParts() : verb;
+    }
+    </script>
+</head>
+<body>
+
+    <div class="show">Hola!</div>
+
+    <div>
+        <div id="showRandomOne">true</div>
+        <hr>
+        <div id="showRandomTwo">faaaaaaalse</div>
+    </div>
+
+    <div>
+        <div id="translate">good</div>
+        <div id="original">bad</div>
+    </div>
+
+    <script>
+        // Получаем все div-блоки в body для поочередного отображения 
+        const divs = Array.from(document.body.querySelectorAll("body > div"));
+
+        // Функция для отображения указанного блока
+        function showDisplay(num) {
+            // Скрываем предыдущий блок
+            divs.at(num - 1).classList.toggle('show');
+            // Добавляем класс для отображения указанного блока
+            divs[num].classList.toggle('show');
+        }
     </script>
 </body>
 </html>
