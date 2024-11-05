@@ -23,11 +23,18 @@
             font-size: 0.5em; /* Размер шрифта уменьшен вдвое */
         }
 
+        .separatorLines::before,
+        .separatorLines::after{
+            /* до и после 'или' эта линия */
+            content: ' ——— ';
+        }
+
         #displaySeparator + div {
             /* Уменьшаем межстрочный интервал, чтобы текст был ближе к разделителю */
             /* для более точного вертикального центрирования */
             line-height: 0.9em;
         }
+
         .hidden { /* Класс для скрытия элемента */
             display: none;
         }
@@ -84,7 +91,9 @@
                 let correctTranslation = currentVerbParts[1]; // Верный ответ
 
                 // Записываем разделитель (в третьем состоянии перезаписывался)
-                document.getElementById("displaySeparator").textContent = ' ——— или ——— ';
+                document.getElementById("displaySeparator").textContent = ' или ';
+                // Добавляем линии разделения
+                document.getElementById('displaySeparator').classList.add('separatorLines');
                 // Отображаем разделитель и второй блок (в первом состояние скрыты)
                 document.getElementById('displaySeparator').classList.remove('hidden');
                 document.getElementById('displaySecond').classList.remove('hidden');
@@ -106,6 +115,9 @@
                 // Отображаем правильный ответ и оригинальный глагол
                 document.getElementById("displayFirst").textContent = currentVerbParts[1];
                 document.getElementById("displaySeparator").textContent = currentVerbParts[0];
+
+                // Убираем линии разделения
+                document.getElementById('displaySeparator').classList.remove('separatorLines');
 
                 // Скрываем второй блок
                 document.getElementById('displaySecond').classList.add('hidden');
