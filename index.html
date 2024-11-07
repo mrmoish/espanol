@@ -33,7 +33,7 @@
 
 
         /* Скрываем все div-блоки в body */
-        body > div { 
+        main > div {
             display: none;
         }
 
@@ -149,22 +149,25 @@
 </head>
 <body>
 
-    <div class="show">Hola!</div>
+    <main>
+        <div class="show">Hola!</div>
 
-    <div>
-        <div id="showRandomOne">true</div>
-        <hr>
-        <div id="showRandomTwo">faaaaaaalse</div>
-    </div>
+        <div>
+            <div id="showRandomOne">true</div>
+            <hr>
+            <div id="showRandomTwo">false</div>
+        </div>
 
-    <div>
-        <div id="translate">good</div>
-        <div id="original">bad</div>
-    </div>
+        <div>
+            <div id="translate">translate</div>
+            <div id="original">verb</div>
+        </div>
+    </main>
+
 
     <script>
         // Получаем все div-блоки в body для поочередного отображения 
-        const divs = Array.from(document.body.querySelectorAll("body > div"));
+        const divs = Array.from(document.body.querySelectorAll("main > div"));
 
         // Функция для отображения указанного блока
         function showDisplay(num) {
