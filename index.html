@@ -6,10 +6,13 @@
     <title>ESPAÑOL</title>
 
     <style>
-        body { 
+
+        main {
             display: flex; /* Используем flexbox для центрирования содержимого */
 
-            height: 100vh; /* Высота страницы 100% для центрирования по вертикали */
+            /* TODO: скрыть адресную строку
+            /* Высота без адресной строки */
+            height: 91vh;
             align-items: center; /* Центрируем содержимое по вертикали */
 
             justify-content: center; /* Центрируем содержимое по горизонтали */
@@ -42,111 +45,163 @@
         .show {
             display: block;
         }
+
+
+        #input{
+            /* Скрываем элемент по умолчанию */
+            opacity: 0; 
+
+            /* Позиция относительно экрана */
+            position: fixed; 
+
+            /* Центрируем */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            /* Увеличеваем размер */
+            font-size: 20px;
+            padding: 1em;
+
+        }
+
+        /* при фокусе отображать элемент */
+        #input:focus{
+            opacity: 1; 
+        }
     </style>
 
     <script>
-    // Переменная для отслеживания текущего состояния отображения
-    let displayState = 1;
-    // Переменная для хранения частей текущего глагола (оригинал и перевод)
-    let currentVerbParts = [];
 
-    // Обработчик клика на странице
-    document.addEventListener("click", function(event) {
-        // Обрабатываем действия в зависимости от текущего состояния отображения
-        switch (displayState) {
-            case 0:
-                // [зацикливания] Промежуточное состояние между 2 и 1 состоянием 
+        // Переменная для отслеживания текущего состояния отображения
+        let displayState = 1;
+        // Переменная для хранения частей текущего глагола (оригинал и перевод)
+        let currentVerbParts = [];
 
-                // Для следующего клика указываем следующее состояние
-                displayState++;
-                // TODO: [оптимизация] увеличить на +2, а не на +1 в case 0 и 1 
+        // Обработчик клика на странице
+        document.addEventListener("click", function(event) {
+            // Обрабатываем действия в зависимости от текущего состояния отображения
+            switch (displayState) {
+                case 0:
+                    // [зацикливания] Промежуточное состояние между 2 и 1 состоянием 
 
-                // Отображаем нулевой блок (и скрываем блок 2)
-                showDisplay(0);
+                    // Для следующего клика указываем следующее состояние
+                    displayState++;
+                    // TODO: [оптимизация] увеличить на +2, а не на +1 в case 0 и 1 
 
-                // Переход к case 1 без использования break
-            case 1:
-                // Начинается с этого блока после приветствия 
-                // Первое состояние: отображаем случайный глагол 
+                    // Отображаем нулевой блок (и скрываем блок 2)
+                    showDisplay(0);
 
-                displayState++; // Переходим ко второму состоянию
+                    // Переход к case 1 без использования break
+                case 1:
+                    // Начинается с этого блока после приветствия 
+                    // Первое состояние: отображаем случайный глагол 
 
-                // В массив добавляем случайный глагол и его перевод 
-                currentVerbParts = randomVerbParts();
+                    displayState++; // Переходим ко второму состоянию
 
-                // Отображаем случайный глагол
-                divs[0].textContent = currentVerbParts[0];
-                break;
+                    // В массив добавляем случайный глагол и его перевод 
+                    currentVerbParts = randomVerbParts();
 
-            case 2:
-                // Второе состояние: отображаем правильный и неправильный перевод глагола
+                    // Отображаем случайный глагол
+                    divs[0].textContent = currentVerbParts[0];
+                    break;
 
-                // Для следующего клика указываем следующее состояние
-                displayState++;
+                case 2:
+                    // Второе состояние: отображаем правильный и неправильный перевод глагола
 
-                // Отображаем следующий блок (и скрываем предыдущий)
-                showDisplay(1);
+                    // Для следующего клика указываем следующее состояние
+                    displayState++;
 
-                // Случайным образом определяем порядок отображения вариантов перевода
-                if (Math.random() < 0.5) {
-                    document.getElementById("showRandomOne").textContent = currentVerbParts[1];
-                    document.getElementById("showRandomTwo").textContent = randomVerbParts()[1];
-                } else {
-                    document.getElementById("showRandomOne").textContent = randomVerbParts()[1];
-                    document.getElementById("showRandomTwo").textContent = currentVerbParts[1];
-                }
-                break;
+                    // Отображаем следующий блок (и скрываем предыдущий)
+                    showDisplay(1);
 
-            default:
-                // Третье состояние: показываем правильный перевод текущего глагола
-                // Для следующего клика сбрасываем состояние
-                displayState = 0;
+                    // Случайным образом определяем порядок отображения вариантов перевода
+                    if (Math.random() < 0.5) {
+                        document.getElementById("showRandomOne").textContent = currentVerbParts[1];
+                        document.getElementById("showRandomTwo").textContent = randomVerbParts()[1];
+                    } else {
+                        document.getElementById("showRandomOne").textContent = randomVerbParts()[1];
+                        document.getElementById("showRandomTwo").textContent = currentVerbParts[1];
+                    }
+                    break;
 
-                // Отображаем следующий блок (и скрываем предыдущий)
-                showDisplay(2);
+                default:
+                    // Третье состояние: показываем правильный перевод текущего глагола
+                    // Для следующего клика сбрасываем состояние
+                    displayState = 0;
 
-                // Отображаем правильный перевод и оригинальный глагол
-                document.getElementById("translate").textContent = currentVerbParts[1];
-                document.getElementById("original").textContent = currentVerbParts[0];
-                break;
+                    // Отображаем следующий блок (и скрываем предыдущий)
+                    showDisplay(2);
+
+                    // Отображаем правильный перевод и оригинальный глагол
+                    document.getElementById("translate").textContent = currentVerbParts[1];
+                    document.getElementById("original").textContent = currentVerbParts[0];
+                    break;
+            }
+        });
+
+
+        // Массив для хранения глаголов
+        let verbs = ['1'];
+        loadVerbs(); // Загружаем глаголы в массив
+        // Функция для загрузки файла с глаголами
+        function loadVerbs() {
+            // Используем fetch для загрузки файла с сервера
+            fetch('verbs')
+                .then(response => {
+                    // Проверяем, успешно ли загрузился файл
+                    if (!response.ok) throw new Error("Ошибка загрузки файла");
+                    // Если загрузка успешна, возвращаем содержимое как текст
+                    return response.text();
+                })
+                .then(content => {
+                    // Разбиваем загруженное содержимое на массив строк по символу новой строки
+                    const lines = content.split("\n");
+
+                    // Фильтруем массив, оставляя только непустые строки (удаляем строки, которые содержат только пробелы)
+                    verbs = lines.filter(line => line.trim() !== "");
+                })
+                // Обрабатываем ошибки, если загрузка не удалась, и выводим их в консоль
+                .catch(error => console.error("Ошибка:", error));
         }
-    });
 
 
-    // Массив для хранения глаголов
-    let verbs = ['1'];
-    loadVerbs(); // Загружаем глаголы в массив
-    // Функция для загрузки файла с глаголами
-    function loadVerbs() {
-        // Используем fetch для загрузки файла с сервера
-        fetch('verbs')
-            .then(response => {
-                // Проверяем, успешно ли загрузился файл
-                if (!response.ok) throw new Error("Ошибка загрузки файла");
-                // Если загрузка успешна, возвращаем содержимое как текст
-                return response.text();
-            })
-            .then(content => {
-                // Разбиваем загруженное содержимое на массив строк по символу новой строки
-                const lines = content.split("\n");
+        // Функция для получения случайного глагола
+        function randomVerbParts() {
+            // Генерируем случайный индекс для получения случайного перевода
+            // Получаем глагол с переводом по индексу и разбиваем на массив
+            const verb = verbs[Math.floor(Math.random() * verbs.length)].split('–');
 
-                // Фильтруем массив, оставляя только непустые строки (удаляем строки, которые содержат только пробелы)
-                verbs = lines.filter(line => line.trim() !== "");
-            })
-            // Обрабатываем ошибки, если загрузка не удалась, и выводим их в консоль
-            .catch(error => console.error("Ошибка:", error));
-    }
+            // Если случайный глагол совпадает с текущим, то пробуем снова
+            return verb[0] === currentVerbParts[0] ? randomVerbParts() : verb;
+        }
 
 
-    // Функция для получения случайного глагола
-    function randomVerbParts() {
-        // Генерируем случайный индекс для получения случайного перевода
-        // Получаем глагол с переводом по индексу и разбиваем на массив
-        const verb = verbs[Math.floor(Math.random() * verbs.length)].split('–');
 
-        // Если случайный глагол совпадает с текущим, то пробуем снова
-        return verb[0] === currentVerbParts[0] ? randomVerbParts() : verb;
-    }
+        // === СВАЙП ===
+
+        // Объявляем переменную для хранения начальной позиции движения касания
+        let startY; 
+        
+        // Добавляем обработчик события начала движения касания
+        document.addEventListener('touchstart', function(e) {
+            startY = e.touches[0].clientY; // Сохраняем начальную позицию касания по оси Y
+        });
+
+        // Добавляем обработчик события окончания движения касания
+        document.addEventListener('touchend', function(e) {
+
+             // Получаем конечную позицию движения касания по оси Y
+            let endY = e.changedTouches[0].clientY;
+
+            // Проверка на свайп вверх (разница позиций больше 50 пикселей)
+            if (startY - endY > 50) {
+                // alert("fff")
+                // Устанавливаем фокус на элемент с id 'input'
+                document.getElementById('input').focus();
+            }
+        });
+
     </script>
 
 </head>
@@ -166,6 +221,8 @@
             <div id="original">verb</div>
         </div>
     </main>
+
+    <input type="text" id="input" placeholder="Введите новую фразу">
 
     <script>
         // Получаем все div-блоки в main для поочередного отображения
