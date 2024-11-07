@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ESPAÑOL</title>
+
     <style>
         body { 
             display: flex; /* Используем flexbox для центрирования содержимого */
@@ -32,7 +33,7 @@
         }
 
 
-        /* Скрываем все div-блоки в body */
+        /* Скрываем все div-блоки в main */
         main > div {
             display: none;
         }
@@ -42,6 +43,7 @@
             display: block;
         }
     </style>
+
     <script>
     // Переменная для отслеживания текущего состояния отображения
     let displayState = 1;
@@ -146,6 +148,7 @@
         return verb[0] === currentVerbParts[0] ? randomVerbParts() : verb;
     }
     </script>
+
 </head>
 <body>
 
@@ -164,9 +167,8 @@
         </div>
     </main>
 
-
     <script>
-        // Получаем все div-блоки в body для поочередного отображения 
+        // Получаем все div-блоки в main для поочередного отображения
         const divs = Array.from(document.body.querySelectorAll("main > div"));
 
         // Функция для отображения указанного блока
@@ -177,5 +179,6 @@
             divs[num].classList.toggle('show');
         }
     </script>
+
 </body>
 </html>
