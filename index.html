@@ -192,8 +192,10 @@
                     return response.json();
                 })
                 .then(content => {
-			verbs += content.map(item => item.spanish + " – "  + item.russian);
-                    // Разбиваем загруженное содержимое на массив строк по символу новой строки
+			
+			const ph = content.map(item => item.spanish + " – "  + item.russian);
+                   	verbs.push(...ph);
+			 // Разбиваем загруженное содержимое на массив строк по символу новой строки
                 })
                 // Обрабатываем ошибки, если загрузка не удалась, и выводим их в консоль
                 .catch(error => console.error("Ошибка:", error));
