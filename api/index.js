@@ -1,27 +1,27 @@
+// Библиотека для работы с базой данных
+// Класс для работы с базой данных
+// Класс для указания конкретной версии API
 const { MongoClient, ServerApiVersion } = require('mongodb');
+
+// [Безопасность] URL из переменной окружения для подключения к базе данных
 const uri = process.env.MONGODB_URI
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1
-  }
-});
+// Объект для работы с базами данных с указанной стабильной версией API
+const client = new MongoClient(uri, {serverApi: {version: ServerApiVersion.v1}});
 
-
+// Экспортируем асинхронную функцию-обработчик, которая отвечает на HTTP-запросы
+// export -  функцию доступной за пределами файла.
  export  default async function handler(req, res) {
-  // try {
-  //   // Connect the client to the server	(optional starting in v4.7)
+
+    // Устанавливаем соединение с базой данных
     await client.connect();
-    // Send a ping to confirm a successful connection
+
+    // Получаем доступ к определённой базе данных и коллекции (таблице)
     const collection = client.db('box').collection('exampleCollection');
 
+    // Преобразуем в массив все данные из коллекции 
     const results = await collection.find().toArray();
 
-  //   console.log(results);
-  // } finally {
-  //   // Ensures that the client will close when you finish/error
-  //   await client.close();
-  // }
+    // Отправляем данные как JSON-ответ с HTTP-статусом 200
     res.status(200).json(results);
 }
