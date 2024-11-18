@@ -192,9 +192,8 @@
                     return response.json();
                 })
                 .then(content => {
-			verbs += content.map(item => [item.spanish, item.russian]);
+			verbs += content.map(item => item.spanish + " - "  + item.russian);
                     // Разбиваем загруженное содержимое на массив строк по символу новой строки
-		document.getElementById('output').textContent = JSON.stringify(content, null, 2);
                 })
                 // Обрабатываем ошибки, если загрузка не удалась, и выводим их в консоль
                 .catch(error => console.error("Ошибка:", error));
