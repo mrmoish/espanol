@@ -182,11 +182,18 @@
 	console.log("hi");
 	const url = '/api/index.js'
 
-	fetch(url)
-  		.then(response => response.json())
-  		.then(data => console.log(data))
-  		.catch(error => console.error('Error:', error));
-        // === СВАЙП ===
+      try {
+        const response = await fetch(url, { method: 'POST' }); // Отправка POST-запроса
+        if (!response.ok) throw new Error('Ошибка запроса: ' + response.statusText);
+
+        const data = await response.json(); // Парсинг ответа в формате JSON
+        document.getElementById('output').textContent = JSON.stringify(data);
+      } catch (error) {
+        console.error('Ошибка:', error);
+        document.getElementById('output').textContent = 'Произошла ошибка: ' + error.message;
+      }
+
+	// === СВАЙП ===
 
         // Объявляем переменную для хранения начальной позиции движения касания
         let startY; 
