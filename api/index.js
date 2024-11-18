@@ -19,7 +19,7 @@ export default async function handler(req, res) {
     await client.connect();
 
     // Получаем доступ к определённой базе данных и коллекции (таблице)
-    const collection = client.db('box').collection('exampleCollection');
+    const collection = client.db('DataBase').collection('espanol');
 
     // Преобразуем в массив все данные из коллекции 
     const results = await collection.find().toArray();
