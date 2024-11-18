@@ -11,7 +11,7 @@ const client = new MongoClient(uri, {serverApi: {version: ServerApiVersion.v1}})
 
 // Экспортируем асинхронную функцию-обработчик, которая отвечает на HTTP-запросы
 // export -  функцию доступной за пределами файла.
- export  default async function handler(req, res) {
+ export async function handler(req, res) {
 
     // Устанавливаем соединение с базой данных
     await client.connect();
