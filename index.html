@@ -141,6 +141,8 @@
         });
 
 
+	// === Глаголы из файла ===
+
         // Массив для хранения глаголов
         let verbs = ['1'];
         loadVerbs(); // Загружаем глаголы в массив
@@ -176,8 +178,14 @@
             return verb[0] === currentVerbParts[0] ? randomVerbParts() : verb;
         }
 
+	// === Фразы из базы данных 
+	console.log("hi");
+	const url = '/api/index.js'
 
-
+	fetch(url)
+  		.then(response => response.json())
+  		.then(data => console.log(data))
+  		.catch(error => console.error('Error:', error));
         // === СВАЙП ===
 
         // Объявляем переменную для хранения начальной позиции движения касания
