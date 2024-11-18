@@ -180,17 +180,24 @@
 	// === Фразы из базы данных 
 	console.log("hi");
 	const url = '/api/index.js'
-
-      try {
-        const response = await fetch(url, { method: 'POST' }); // Отправка POST-запроса
-        if (!response.ok) throw new Error('Ошибка запроса: ' + response.statusText);
-
-        const data = await response.json(); // Парсинг ответа в формате JSON
-        document.getElementById('output').textContent = JSON.stringify(data);
-      } catch (error) {
-        console.error('Ошибка:', error);
-        document.getElementById('output').textContent = 'Произошла ошибка: ' + error.message;
-      }
+        loadVerbs2(); // Загружаем глаголы в массив
+        // Функция для загрузки файла с глаголами
+        function loadVerbs2() {
+            // Используем fetch для загрузки файла с сервера
+            fetch(url)
+                .then(response => {
+                    // Проверяем, успешно ли загрузился файл
+                    if (!response.ok) throw new Error("Ошибка загрузки файла");
+                    // Если загрузка успешна, возвращаем содержимое как текст
+                    return response.text();
+                })
+                .then(content => {
+                    // Разбиваем загруженное содержимое на массив строк по символу новой строки
+		document.getElementById('output').textContent = content;
+                })
+                // Обрабатываем ошибки, если загрузка не удалась, и выводим их в консоль
+                .catch(error => console.error("Ошибка:", error));
+        }
 
 	// === СВАЙП ===
 
