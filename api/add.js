@@ -26,8 +26,8 @@ export default async function handler(req, res) {
 	
     // Документ для вставки
     const document = {
-      russian: "ff",
-      spanish: 'fdsf',
+      spanish: es,
+      russian: ru
     };
 
     // Вставка документа
