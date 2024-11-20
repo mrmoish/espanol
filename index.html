@@ -64,16 +64,20 @@
 
         form > textarea{
             /* Скрываем элемент по умолчанию */
+            pointer-events: none;
             opacity: 0; 
 
+            transition: .3s;
+
             display: block;
-            width: 0;
+
+            width: 80vw;
 
             /* Увеличеваем размер */
-            font-size: 20px;
+            
+            font-size: 1.5em;
             padding: 1em;
 
-            width: 0;
             margin: 1em auto ;
 
             resize: none;
@@ -82,9 +86,9 @@
 
         /* при фокусе отображать элемент */
         textarea:focus{
-            
-            width: 80vw;
+            pointer-events: auto;
             opacity: 1; 
+
         }
     </style>
 
@@ -283,24 +287,26 @@
 
 
 
-        const spanish = document.getElementById('spanish');
+    const spanish = document.getElementById('spanish');
     const russian = document.getElementById('russian');
 
+    // TODO: когда текст длинее строчкие переход на новую строку
     spanish.addEventListener('keydown', (event) => {
     
       if (event.key === 'Enter') {
         event.preventDefault(); // Предотвращаем добавление новой строки
         if (spanish.value){
 	      russian.focus(); // Перемещаем фокус на второе поле
-	}
+	    }
       }
     });
 
     russian.addEventListener('keydown', (event) => {
       if (event.key === 'Enter') {
-        // event.preventDefault(); // Предотвращаем добавление новой строки
-        // form.submit(); // Отправляем форму на сервер
-        russian.blur();
+        event.preventDefault(); // Предотвращаем добавление новой строки
+        if (russian.value){
+            russian.blur();
+        }
       }
     });
 
