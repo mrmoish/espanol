@@ -35,5 +35,5 @@ export default async function handler(req, res) {
 
 
     // Отправляем данные как JSON-ответ с HTTP-статусом 200
-    res.status(200).json(results);
+    res.status(200).json(result);
 }
