@@ -288,7 +288,7 @@
 
     spanish.addEventListener('keydown', (event) => {
     
-      if (event.key === 'Enter') {
+      if (event.key === 'Enter' && spanish.value === '')) {
         event.preventDefault(); // Предотвращаем добавление новой строки
         russian.focus(); // Перемещаем фокус на второе поле
       }
