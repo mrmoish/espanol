@@ -25,6 +25,7 @@
             /* Отступы по бокам, чтобы разделительная линия не доходила до краев экрана */
             padding: 0 1em;
 
+
         }
 
         hr + div {
@@ -47,26 +48,42 @@
         }
 
 
-        #input{
-            /* Скрываем элемент по умолчанию */
-            opacity: 0; 
+        form{
+
 
             /* Позиция относительно экрана */
             position: fixed; 
-
+            /* TODO: позиция относительна клавиатуры*/
             /* Центрируем */
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            left: 0;
+            right: 0;
+
+
+
+        }
+
+        form > textarea{
+            /* Скрываем элемент по умолчанию */
+            opacity: 0; 
+
+            display: block;
+            width: 0;
 
             /* Увеличеваем размер */
             font-size: 20px;
             padding: 1em;
 
+            width: 0;
+            margin: 1em auto ;
+
+            resize: none;
         }
 
+
         /* при фокусе отображать элемент */
-        #input:focus{
+        textarea:focus{
+            
+            width: 80vw;
             opacity: 1; 
         }
     </style>
@@ -180,56 +197,62 @@
 	// === Фразы из базы данных 
 	console.log("hi");
 	const url = '/api/index.js'
-        loadVerbs2(); // Загружаем глаголы в массив
-        // Функция для загрузки файла с глаголами
-        function loadVerbs2() {
-            // Используем fetch для загрузки файла с сервера
-            fetch(url)
-                .then(response => {
-                    // Проверяем, успешно ли загрузился файл
-                    if (!response.ok) throw new Error("Ошибка загрузки файла");
-                    // Если загрузка успешна, возвращаем содержимое как текст
-                    return response.json();
-                })
-                .then(content => {
-			
-			const ph = content.map(item => item.spanish + " – "  + item.russian);
-                   	verbs.push(...ph);
-			 // Разбиваем загруженное содержимое на массив строк по символу новой строки
-                })
-                // Обрабатываем ошибки, если загрузка не удалась, и выводим их в консоль
-                .catch(error => console.error("Ошибка:", error));
-        }
-
-	// === СВАЙП ===
-
-        // Объявляем переменную для хранения начальной позиции движения касания
-        let startY; 
+    loadVerbs2(); // Загружаем глаголы в массив
+    // Функция для загрузки файла с глаголами
+    function loadVerbs2() {
+        // Используем fetch для загрузки файла с сервера
+        fetch(url)
+            .then(response => {
+                // Проверяем, успешно ли загрузился файл
+                if (!response.ok) throw new Error("Ошибка загрузки файла");
+                // Если загрузка успешна, возвращаем содержимое как текст
+                return response.json();
+            })
+            .then(content => {
         
-        // Добавляем обработчик события начала движения касания
-        document.addEventListener('touchstart', function(e) {
-            startY = e.touches[0].clientY; // Сохраняем начальную позицию касания по оси Y
-        });
+        const ph = content.map(item => item.spanish + " – "  + item.russian);
+                verbs.push(...ph);
+            // Разбиваем загруженное содержимое на массив строк по символу новой строки
+            })
+            // Обрабатываем ошибки, если загрузка не удалась, и выводим их в консоль
+            .catch(error => console.error("Ошибка:", error));
+    }
 
-        // Добавляем обработчик события окончания движения касания
-        document.addEventListener('touchend', function(e) {
 
-             // Получаем конечную позицию движения касания по оси Y
-            let endY = e.changedTouches[0].clientY;
+    // === НОВАЯ ФРАЗА ===
 
-            // Проверка на свайп вверх (разница позиций больше 50 пикселей)
-            if (startY - endY > 50) {
-                // alert("fff")
-                // Устанавливаем фокус на элемент с id 'input'
-                document.getElementById('input').focus();
-            }
-        });
+	// свайп
+    // Объявляем переменную для хранения начальной позиции движения касания
+    let startY; 
+    
+    // Добавляем обработчик события начала движения касания
+    document.addEventListener('touchstart', function(e) {
+        startY = e.touches[0].clientY; // Сохраняем начальную позицию касания по оси Y
+    });
 
+    // Добавляем обработчик события окончания движения касания
+    document.addEventListener('touchend', function(e) {
+
+            // Получаем конечную позицию движения касания по оси Y
+        let endY = e.changedTouches[0].clientY;
+
+        // Проверка на свайп вверх (разница позиций больше 50 пикселей)
+        if (startY - endY > 50) {
+            // Устанавливаем фокус на элемент с id 'input'
+            document.getElementById('spanish').focus();
+        }
+    });
     </script>
 
 </head>
 <body>
-<p id="output">hhhh</p>
+
+    <form>
+        <textarea rows="1" id="spanish" placeholder="Введите новую фразу"></textarea>
+        <textarea rows="1" id="russian" placeholder="Введите перевод"></textarea>
+    </form>
+
+
     <main>
         <div class="show">Hola!</div>
 
@@ -245,7 +268,6 @@
         </div>
     </main>
 
-    <input type="text" id="input" placeholder="Введите новую фразу">
 
     <script>
         // Получаем все div-блоки в main для поочередного отображения
@@ -258,6 +280,28 @@
             // Добавляем класс для отображения указанного блока
             divs[num].classList.toggle('show');
         }
+
+
+
+        const spanish = document.getElementById('spanish');
+    const russian = document.getElementById('russian');
+
+    spanish.addEventListener('keydown', (event) => {
+    
+      if (event.key === 'Enter') {
+        event.preventDefault(); // Предотвращаем добавление новой строки
+        russian.focus(); // Перемещаем фокус на второе поле
+      }
+    });
+
+    russian.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        // event.preventDefault(); // Предотвращаем добавление новой строки
+        // form.submit(); // Отправляем форму на сервер
+        russian.blur();
+      }
+    });
+
     </script>
 
 </body>
