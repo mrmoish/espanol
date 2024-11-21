@@ -87,6 +87,7 @@
             display: none;
             margin: auto;
             width: fit-content;
+            font-weight: 100;
         }
     </style>
 
@@ -316,7 +317,7 @@
         function submit(){
 
             const form = document.getElementById('formAdd')
-            const formData = new FormData(); // Собираем данные формы
+            const formData = new FormData(form); // Собираем данные формы
             const queryString = new URLSearchParams(formData).toString(); // Конвертируем в строку запроса
             form.reset()
 
@@ -325,16 +326,19 @@
             fetch('api/add?' + queryString, { method: 'GET',}) 
                 .then(response => {
                     showStatus.innerHTML = response.ok ? 'отправлено' : 'не отправлено'
-
+                    // показать 1 секунду 
                     showStatus.style.display = "block";
-
-                    // Через 3 секунды скрываем его
                     setTimeout(function() {
                         showStatus.style.display = "none";
-                    }, 1000); //
+                    }, 2000);
                 })
                 .catch(error => {
                     showStatus.innerHTML = 'ошибка при отправление'; // Отобразить данные
+                    // показать 3 секунду 
+                    showStatus.style.display = "block";
+                    setTimeout(function() {
+                        showStatus.style.display = "none";
+                    }, 4000);
                 });
                 
         }
