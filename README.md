@@ -33,6 +33,14 @@ css > main > height: 91vh;
 
 resize: none;
 
+4. оптимизировать, очень похощие функции
+
+```
+spanish.addEventListener('keydown', (event) => {})
+russian.addEventListener('keydown', (event) => {})
+```
+
+
 # Maybe
 
 1. css > body > margin: 0; /* Убираем отступы body, чтобы высота не превышала 100% */

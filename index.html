@@ -295,6 +295,20 @@
         const russian = document.getElementById('russian');
 
 
+
+        spanish.addEventListener('input', () =>{
+            if(spanish.scrollHeight > spanish.clientHeight){
+                spanish.rows += 1 
+            }
+        })
+
+        russian.addEventListener('input', () =>{
+            if(russian.scrollHeight > russian.clientHeight){
+                russian.rows += 1 
+            }
+        })
+
+
         spanish.addEventListener('keydown', (event) => {
 
             if(event.key === 'Enter') {
@@ -304,22 +318,22 @@
                     russian.focus();
                 }
             }
-        });
+        })
 
       
 
         russian.addEventListener('keydown', (event) => {
+            
             if (event.key === 'Enter') {
                 event.preventDefault();
 
                 russian.value = russian.value.trimEnd()
                 if(russian.value){
-                    russian.value = russian.trimEnd()
                     russian.blur();
                     submit();
                 }
             }
-        });
+        })
 
         function submit(){
 
