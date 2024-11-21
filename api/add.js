@@ -3,6 +3,8 @@
 // Класс для указания конкретной версии API
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
+const ModuleURL = require('url');
+
 // [Безопасность] URL из переменной окружения для подключения к базе данных
 const uri = process.env.MONGODB_URI
 
@@ -22,12 +24,12 @@ export default async function handler(req, res) {
     const collection = client.db('DataBase').collection('espanol');
 
     // Получаем GET параметры из строки запроса
-    const { ru, es } = req.query;
+    const getParams = ModuleURL.parse(req.url,true).query;
 	
     // Документ для вставки
     const document = {
-      spanish: es,
-      russian: ru
+      spanish: getParams['es'],
+      russian: getParams['ru']
     };
 
     // Вставка документа
