@@ -299,6 +299,7 @@
 
             if(event.key === 'Enter') {
                 event.preventDefault();
+                spanish.value = spanish.value.trimEnd()
                 if(spanish.value){
                     russian.focus();
                 }
@@ -310,7 +311,10 @@
         russian.addEventListener('keydown', (event) => {
             if (event.key === 'Enter') {
                 event.preventDefault();
+
+                russian.value = russian.value.trimEnd()
                 if(russian.value){
+                    russian.value = russian.trimEnd()
                     russian.blur();
                     submit();
                 }
@@ -325,6 +329,7 @@
             form.reset()
 
             const showStatus = document.getElementById('status')
+
 
             fetch('api/add?' + queryString, { method: 'GET',}) 
                 .then(response => {
