@@ -251,7 +251,7 @@
 </head>
 <body>
 
-    <form id="formAdd" action="https://espanol-git-dev-mrmoishs-projects.vercel.app/api/add" method="GET">
+    <form id="formAdd">
         <textarea name="es" rows="1" id="spanish" placeholder="Введите новую фразу"></textarea>
         <textarea name="ru" rows="1" id="russian" placeholder="Введите перевод"></textarea>
     </form>
@@ -307,14 +307,30 @@
         if (russian.value){
             
 
-            // Получаем форму
-            const form = document.getElementById('formAdd');
             // Программно отправляем форму
-            form.submit();
+            submit();
             russian.blur();
         }
       }
     });
+
+    function submit(){
+
+        const formData = new FormData(document.getElementById('formAdd')); // Собираем данные формы
+        const queryString = new URLSearchParams(formData).toString(); // Конвертируем в строку запроса
+
+        fetch('api/add?' + queryString, { method: 'GET',})
+            // .then(response => response.text()) // Для текста
+            .then(response => response.json()) // Для JSON (если ожидается JSON-ответ)
+            .then(data => {
+            // document.getElementById('response').innerHTML = data; // Отобразить данные
+            })
+            .catch(error => {
+            // console.error('Ошибка:', error);
+            // document.getElementById('response').innerHTML = 'Ошибка выполнения запроса.';
+            });
+            
+    }
 
     </script>
 
