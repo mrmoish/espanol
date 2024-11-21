@@ -15,6 +15,9 @@
     <title>ESPAÑOL</title>
 
     <style>
+        body {
+            font-family: Tahoma, sans-serif;
+        }
         /* Карточки с фразами */
         main {
             display: flex; /* Используем flexbox для центрирования содержимого */
@@ -24,7 +27,6 @@
 
             height: 91vh; /* Высота без адресной строки */
             
-            font-family: Tahoma, sans-serif;
             font-size: 3em;
 
             /* Чтобы разделительная линия не доходила до краев экрана, отступы по бокам */
@@ -88,6 +90,7 @@
             margin: auto;
             width: fit-content;
             font-weight: 100;
+            columns: grey;
         }
     </style>
 
@@ -330,7 +333,7 @@
                     showStatus.style.display = "block";
                     setTimeout(function() {
                         showStatus.style.display = "none";
-                    }, 2000);
+                    }, 3000);
                 })
                 .catch(error => {
                     showStatus.innerHTML = 'ошибка при отправление'; // Отобразить данные
@@ -338,7 +341,7 @@
                     showStatus.style.display = "block";
                     setTimeout(function() {
                         showStatus.style.display = "none";
-                    }, 4000);
+                    }, 5000);
                 });
                 
         }

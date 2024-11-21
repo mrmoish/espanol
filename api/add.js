@@ -25,7 +25,7 @@ export default async function handler(req, res) {
 
     // Получаем GET параметры из строки запроса
     const getParams = ModuleURL.parse(req.url,true).query;
-	
+    console.log(req)
     // Документ для вставки
     const document = {
       spanish: getParams['es'],
