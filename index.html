@@ -1,94 +1,92 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
+    <!-- кодировку UTF-8 поддерживает символы практически всех языков мира -->
     <meta charset="UTF-8">
+    <!-- width=device-width - ширина страницы равна физической ширине экрана(без эмитации)
+            Мбильные устройства эмитирует более широкий экран (980px)
+            и чтобы она уместилась автоматически уменьшают масштаб страницы.
+            Из-за этого элементы на странице слишком маленькими.
+        initial-scale=1.0 
+            (?)гарантирует, что масштаб страницы будет 100% (не будет масштабирования по умолчанию),
+            так что страница не будет выглядеть уменьшенной или увеличенной.
+    -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ESPAÑOL</title>
 
     <style>
-
+        /* Карточки с фразами */
         main {
             display: flex; /* Используем flexbox для центрирования содержимого */
-
-            /* TODO: скрыть адресную строку
-            /* Высота без адресной строки */
-            height: 91vh;
             align-items: center; /* Центрируем содержимое по вертикали */
-
             justify-content: center; /* Центрируем содержимое по горизонтали */
             text-align: center; /* Центрируем текст потомков */
 
-            margin: 0; /* Убираем отступы, чтобы высота не превышала 100% */
+            height: 91vh; /* Высота без адресной строки */
+            
             font-family: Tahoma, sans-serif;
             font-size: 3em;
 
-            /* Отступы по бокам, чтобы разделительная линия не доходила до краев экрана */
+            /* Чтобы разделительная линия не доходила до краев экрана, отступы по бокам */
             padding: 0 1em;
-
-
-        }
-
-        hr + div {
-            line-height: 0.9em;
-        }
-
-        #original { /* Разделитель с текстом ' - или - ' */
-            font-size: 0.5em; /* Размер шрифта уменьшен вдвое */
         }
 
 
-        /* Скрываем все div-блоки в main */
+        /* Скрываем все div-блоки в main (очередь карточек) */
         main > div {
             display: none;
         }
-
-        /* Класс для отображения div-блоки */
+        /* В один момент времени будет отображатся одна карточка */
         .show {
             display: block;
         }
 
+        /* Разделительная линия по умолчанию вертикально не по центру */
+        hr + div {
+            line-height: 0.9em;
+        }
+
+        /* Карточка с правильным ответом, шрифт ответа в два раза меньше  */
+        #original {
+            font-size: 0.5em;
+        }
+
 
         form{
-
-
             /* Позиция относительно экрана */
             position: fixed; 
-            /* TODO: позиция относительна клавиатуры*/
-            /* Центрируем */
+            /* Для центрирования input по горизонтаил */
+            /* Растягиваем от левого до праовго края экрана */
             left: 0;
-            right: 0;
-
-
-
+            right: 0; 
         }
+        textarea{
+            resize: none; /* убрать кнопку изменения размера поля */
+            pointer-events: none; /* НЕ реагировать на события мыши или пальца */
+            opacity: 0; /* НЕ отображать элемент */
 
-        form > textarea{
-            /* Скрываем элемент по умолчанию */
-            pointer-events: none;
-            opacity: 0; 
-
-            transition: .3s;
-
+            /* центрирование по горизонтали */
             display: block;
-
-            width: 80vw;
-
-            /* Увеличеваем размер */
-            
-            font-size: 1.5em;
-            padding: 1em;
-
             margin: 1em auto ;
 
-            resize: none;
+            width: 80vw; 
+            font-size: 1.5em; 
+            padding: 1em;
         }
 
-
-        /* при фокусе отображать элемент */
+        textarea:valid{
+            opacity: 1;
+        }
+        /* при фокусе  */
         textarea:focus{
-            pointer-events: auto;
-            opacity: 1; 
+            pointer-events: auto; /* реагировать на события мыши или пальца */
+            opacity: 1; /* отображать элемент */
+        }
 
+        form > div{
+            display: none;
+            margin: auto;
+            width: fit-content;
         }
     </style>
 
@@ -252,8 +250,10 @@
 <body>
 
     <form id="formAdd">
-        <textarea name="es" rows="1" id="spanish" placeholder="Введите новую фразу"></textarea>
-        <textarea name="ru" rows="1" id="russian" placeholder="Введите перевод"></textarea>
+        <div id="status">отправка...</div>
+        <!-- name - имя параметра для get запроса -->
+        <textarea rows="1" name="es" id="spanish" placeholder="Введите новую фразу" required></textarea>
+        <textarea rows="1" name="ru" id="russian" placeholder="Введите перевод" required></textarea>
     </form>
 
 
@@ -287,50 +287,57 @@
 
 
 
-    const spanish = document.getElementById('spanish');
-    const russian = document.getElementById('russian');
+        const spanish = document.getElementById('spanish');
+        const russian = document.getElementById('russian');
 
-    // TODO: когда текст длинее строчкие переход на новую строку
-    spanish.addEventListener('keydown', (event) => {
-    
-      if (event.key === 'Enter') {
-        event.preventDefault(); // Предотвращаем добавление новой строки
-        if (spanish.value){
-	      russian.focus(); // Перемещаем фокус на второе поле
-	    }
-      }
-    });
 
-    russian.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter') {
-        event.preventDefault(); // Предотвращаем добавление новой строки
-        if (russian.value){
-            
+        spanish.addEventListener('keydown', (event) => {
 
-            // Программно отправляем форму
-            submit();
-            russian.blur();
+            if(event.key === 'Enter') {
+                event.preventDefault();
+                if(spanish.value){
+                    russian.focus();
+                }
+            }
+        });
+
+      
+
+        russian.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                if(russian.value){
+                    russian.blur();
+                    submit();
+                }
+            }
+        });
+
+        function submit(){
+
+            const form = document.getElementById('formAdd')
+            const formData = new FormData(); // Собираем данные формы
+            const queryString = new URLSearchParams(formData).toString(); // Конвертируем в строку запроса
+            form.reset()
+
+            const showStatus = document.getElementById('status')
+
+            fetch('api/add?' + queryString, { method: 'GET',}) 
+                .then(response => {
+                    showStatus.innerHTML = response.ok ? 'отправлено' : 'не отправлено'
+
+                    showStatus.style.display = "block";
+
+                    // Через 3 секунды скрываем его
+                    setTimeout(function() {
+                        showStatus.style.display = "none";
+                    }, 1000); //
+                })
+                .catch(error => {
+                    showStatus.innerHTML = 'ошибка при отправление'; // Отобразить данные
+                });
+                
         }
-      }
-    });
-
-    function submit(){
-
-        const formData = new FormData(document.getElementById('formAdd')); // Собираем данные формы
-        const queryString = new URLSearchParams(formData).toString(); // Конвертируем в строку запроса
-
-        fetch('api/add?' + queryString, { method: 'GET',})
-            // .then(response => response.text()) // Для текста
-            .then(response => response.json()) // Для JSON (если ожидается JSON-ответ)
-            .then(data => {
-            // document.getElementById('response').innerHTML = data; // Отобразить данные
-            })
-            .catch(error => {
-            // console.error('Ошибка:', error);
-            // document.getElementById('response').innerHTML = 'Ошибка выполнения запроса.';
-            });
-            
-    }
 
     </script>
 
