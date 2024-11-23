@@ -17,7 +17,14 @@
     <style>
         body {
             font-family: Tahoma, sans-serif;
+
+            margin:0; /* Сброс отступов для удобного управления высотой блока main */
+
+
+            overscroll-behavior: none; /* Отключить прокрутку и инерционную в ios */
+            /* touch-action: none; Полностью запретить стандартные жесты */
         }
+
         /* Карточки с фразами */
         main {
             display: flex; /* Используем flexbox для центрирования содержимого */
@@ -25,7 +32,7 @@
             justify-content: center; /* Центрируем содержимое по горизонтали */
             text-align: center; /* Центрируем текст потомков */
 
-            height: 91vh; /* Высота без адресной строки */
+            height: 90vh; /* Высота без адресной строки */
             
             font-size: 3em;
 
@@ -191,8 +198,8 @@
     <form id="formAdd">
         <div id="status">отправка...</div>
         <!-- name - имя параметра для get запроса -->
-        <textarea rows="1" name="es" id="spanish" placeholder="Введите новую фразу" required></textarea>
-        <textarea rows="1" name="ru" id="russian" placeholder="Введите перевод" required></textarea>
+        <textarea maxlength="50" rows="1" name="es" id="spanish" placeholder="Введите новую фразу" required></textarea>
+        <textarea maxlength="50" rows="1" name="ru" id="russian" placeholder="Введите перевод" required></textarea>
     </form>
 
 
