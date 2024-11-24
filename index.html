@@ -22,7 +22,7 @@
 
 
             overscroll-behavior: none; /* Отключить прокрутку и инерционную в ios */
-            /* touch-action: none; Полностью запретить стандартные жесты */
+            touch-action: none;/* Полностью запретить стандартные жесты */
         }
 
         /* Карточки с фразами */
@@ -198,8 +198,8 @@
     <form id="formAdd">
         <div id="status">отправка...</div>
         <!-- name - имя параметра для get запроса -->
-        <textarea maxlength="50" rows="1" name="es" id="spanish" placeholder="Введите новую фразу" required></textarea>
-        <textarea maxlength="50" rows="1" name="ru" id="russian" placeholder="Введите перевод" required></textarea>
+        <textarea maxlength="400" rows="1" name="es" id="spanish" placeholder="Введите новую фразу" required></textarea>
+        <textarea maxlength="400" rows="1" name="ru" id="russian" placeholder="Введите перевод" required></textarea>
     </form>
 
 
