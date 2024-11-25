@@ -21,7 +21,7 @@ export default async function handler(req, res) {
     await client.connect();
 
     // Получаем доступ к определённой базе данных и коллекции (таблице)
-    const collection = client.db('DataBase').collection('espanol');
+    const collection = client.db('DataBase').collection('speech');
 
     // Получаем GET параметры из строки запроса
     const getParams = ModuleURL.parse(req.url,true).query;
