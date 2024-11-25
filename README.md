@@ -64,8 +64,11 @@ russian.addEventListener('keydown', (event) => {})
 
 # Maybe
 
-1. css > body > margin: 0; /* Убираем отступы body, чтобы высота не превышала 100% */
+1. recognition.continuous = true; // Непрерывное распознавание не работает на моб. устройствах
+
+может для других случаев нужно использовать 
 
 2. css > * > box-sizing: border-box;
 
 3. услажить процесс скрытия и отображения input ( очень простая только css и :focus)
+
